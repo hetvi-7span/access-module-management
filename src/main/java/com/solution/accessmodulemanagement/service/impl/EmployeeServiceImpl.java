@@ -35,11 +35,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee update(Employee employee, Integer id) {
-        Employee existingEmployee =  getById(id).orElseThrow(()-> {
-            throw new EmployeeNotFoundException("Employee data not found");
-        });
 
-        return saveOrUpdate(setEmployeeData(employee, existingEmployee));
+        try{
+            Employee existingEmployee =  getById(id).orElseThrow(()-> {
+                throw new EmployeeNotFoundException("Employee data not found");
+            });
+            return saveOrUpdate(setEmployeeData(employee, existingEmployee));
+        }catch (DataIntegrityViolationException exception){
+            throw new EmployeeException("Employee already exists with phone number " + employee.getPhoneNumber() ,HttpStatus.CONFLICT.value(),HttpStatus.CONFLICT);
+        }
+
+
     }
 
     @Override
@@ -47,10 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAll();
     }
 
-    @Override
-    public Optional<Employee> get(Integer id) {
-        log.info("Getting an employee from database");
-        return employeeRepository.findById(id);
+
     public Employee get(Integer id) {
         return  getById(id).orElseThrow(()-> {
             throw new EmployeeException("Employee not found",HttpStatus.NOT_FOUND.value(),HttpStatus.NOT_FOUND);

@@ -9,6 +9,7 @@ import com.solution.accessmodulemanagement.transformer.EmployeeTransformer;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,6 @@ public class EmployeeController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> getEmployeeById(@PathVariable int id) {
         log.info("Rest api call to get a particular employees from database");
-        Optional<Employee> employee = employeeService.get(id);
         return ResponseEntity.ok(employeeTransformer.optionalToDto(employeeService.get(id)));
     }
 
@@ -49,10 +49,8 @@ public class EmployeeController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseDto> updateEmployee(@RequestBody EmployeeRequestDto employeeDto, @PathVariable("id") Integer id) {
-        log.info("Rest api call to get update existing employee in database");
-        return ResponseEntity.ok(employeeService.update(employeeDto, id));
     public ResponseEntity<EmployeeResponseDto> updateEmployee(@RequestBody EmployeeRequestDto employeeDto, @PathVariable("id") Integer id) {
+        log.info("Rest api call to get update existing employee in database");
         Employee employee = employeeTransformer.transformEmployeeRequest(employeeDto);
         return ResponseEntity.ok(employeeTransformer.transformEmployeeEntity(employeeService.update(employee, id),HttpStatus.OK,HttpStatus.OK.value(), "Employee created successfully"));
     }
