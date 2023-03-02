@@ -29,30 +29,34 @@ public class EmployeeController {
 
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> getAllEmployees() {
+        log.info("Rest api call to get all employees from database");
         List<Employee> employeeList = employeeService.getAll();
         return ResponseEntity.ok(employeeTransformer.transformEmployeeEntityList(employeeList));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> getEmployeeById(@PathVariable int id) {
+        log.info("Rest api call to get a particular employees from database");
         Optional<Employee> employee = employeeService.get(id);
         return ResponseEntity.ok(employeeTransformer.optionalToDto(employee.get()));
     }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EmployeeResponseDto> addEmployee(@Valid @RequestBody EmployeeRequestDto employeeDto) {
+        log.info("Rest api call to get add new employee in database");
         Employee employee = employeeTransformer.transformEmployeeRequest(employeeDto);
         return ResponseEntity.ok(employeeTransformer.transformEmployeeEntity(employee));
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> updateEmployee(@RequestBody EmployeeRequestDto employeeDto, @PathVariable("id") Integer id) {
+        log.info("Rest api call to get update existing employee in database");
         return ResponseEntity.ok(employeeService.update(employeeDto, id));
     }
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> deleteEmployee(@PathVariable int id) {
-        log.info(String.format("Delete employee data by provided id %s", id));
+        log.info("Rest api call to get delete an employees from database");
         return ResponseEntity.ok(employeeService.delete(id));
 
     }

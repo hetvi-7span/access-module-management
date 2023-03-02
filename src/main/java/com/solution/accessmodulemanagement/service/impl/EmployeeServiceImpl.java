@@ -30,6 +30,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee create(Employee employee) {
         try{
+            log.info("adding new employee in database");
             return employeeRepository.save(employee);
         }catch (DataIntegrityViolationException exception){
            throw new EmployeeException("Employee already exists with phone number " + employee.getPhoneNumber() ,HttpStatus.CONFLICT.value(),HttpStatus.CONFLICT);
@@ -61,11 +62,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getAll() {
+        log.info("Getting all employees from database");
         return employeeRepository.findAll();
     }
 
     @Override
     public Optional<Employee> get(Integer id) {
+        log.info("Getting an employee from database");
         return employeeRepository.findById(id);
     }
 

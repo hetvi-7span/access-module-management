@@ -10,6 +10,7 @@ import com.solution.accessmodulemanagement.entity.ModuleEnum;
 import com.solution.accessmodulemanagement.exception.EmployeeException;
 import com.solution.accessmodulemanagement.repository.ModuleRepository;
 import com.solution.accessmodulemanagement.service.EmployeeService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
+@Slf4j
 public class EmployeeTransformer {
 
     @Autowired
@@ -71,6 +73,7 @@ public class EmployeeTransformer {
         } else {
             throw new EmployeeException("No data found", HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND);
         }
+        log.info("Response generated");
         return responseDto;
     }
 
