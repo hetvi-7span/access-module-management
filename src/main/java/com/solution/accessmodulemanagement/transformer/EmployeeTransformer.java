@@ -7,6 +7,7 @@ import com.solution.accessmodulemanagement.dto.response.ResponseDto;
 import com.solution.accessmodulemanagement.entity.Employee;
 import com.solution.accessmodulemanagement.entity.Module;
 import com.solution.accessmodulemanagement.entity.ModuleEnum;
+import com.solution.accessmodulemanagement.exception.EmployeeException;
 import com.solution.accessmodulemanagement.repository.ModuleRepository;
 import com.solution.accessmodulemanagement.service.EmployeeService;
 import org.modelmapper.ModelMapper;
@@ -14,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class EmployeeTransformer {
@@ -54,31 +52,49 @@ public class EmployeeTransformer {
     }
 
 
-    public ModuleResponseDto transformModuleEntity(Module module){
-        return modelMapper.map(module,ModuleResponseDto.class);
+    public ModuleResponseDto transformModuleEntity(Module module) {
+        return modelMapper.map(module, ModuleResponseDto.class);
     }
 
     public ResponseDto transformEmployeeEntityList(List<Employee> employeeList) {
-        List<EmployeeResponseDto> employeeResponseDtoList = new ArrayList<>();
-        employeeList.forEach(employee ->{
-            EmployeeResponseDto employeeResponseDto = entityToDto(employee);
-            employeeResponseDtoList.add(employeeResponseDto);
-        });
         ResponseDto responseDto = new ResponseDto();
-        responseDto.setData(employeeResponseDtoList);
-        responseDto.setHttpStatus(HttpStatus.OK);
-        responseDto.setHttpStatusCode(HttpStatus.OK.value());
-
+        if (employeeList.size() > 0) {
+            List<EmployeeResponseDto> employeeResponseDtoList = new ArrayList<>();
+            employeeList.forEach(employee -> {
+                EmployeeResponseDto employeeResponseDto = entityToDto(employee);
+                employeeResponseDtoList.add(employeeResponseDto);
+            });
+            responseDto.setData(employeeResponseDtoList);
+            responseDto.setMessage("Data fetched successfully");
+            responseDto.setHttpStatus(HttpStatus.OK);
+            responseDto.setHttpStatusCode(HttpStatus.OK.value());
+        } else {
+            throw new EmployeeException("No data found", HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND);
+        }
         return responseDto;
     }
 
-    private EmployeeResponseDto entityToDto(Employee employee){
+    public EmployeeResponseDto entityToDto(Employee employee) {
         EmployeeResponseDto employeeResponseDto = modelMapper.map(employee, EmployeeResponseDto.class);
-        if(employee.getModule() != null){
+        if (employee.getModule() != null) {
             Set<ModuleResponseDto> moduleResponseSet = new HashSet<>();
             employee.getModule().forEach(moduleEntity -> moduleResponseSet.add(transformModuleEntity(moduleEntity)));
             employeeResponseDto.setModule(moduleResponseSet);
         }
         return employeeResponseDto;
+    }
+
+    public ResponseDto optionalToDto(Employee employeeOptional) {
+        ResponseDto responseDto = new ResponseDto();
+        if (employeeOptional != null) {
+            EmployeeResponseDto employeeResponseDto = entityToDto(employeeOptional);
+            responseDto.setData(employeeResponseDto);
+            responseDto.setMessage("Data fetched successfully");
+            responseDto.setHttpStatus(HttpStatus.OK);
+            responseDto.setHttpStatusCode(HttpStatus.OK.value());
+        } else {
+            throw new EmployeeException("No data found", HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND);
+        }
+        return responseDto;
     }
 }

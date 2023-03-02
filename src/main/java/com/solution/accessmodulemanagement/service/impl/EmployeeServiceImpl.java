@@ -2,6 +2,7 @@ package com.solution.accessmodulemanagement.service.impl;
 
 import com.solution.accessmodulemanagement.dto.request.EmployeeRequestDto;
 import com.solution.accessmodulemanagement.dto.response.EmployeeResponseDto;
+import com.solution.accessmodulemanagement.dto.response.ResponseDto;
 import com.solution.accessmodulemanagement.entity.Employee;
 import com.solution.accessmodulemanagement.exception.EmployeeException;
 import com.solution.accessmodulemanagement.exception.EmployeeNotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -24,8 +26,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     ModelMapper modelMapper;
     @Autowired
     EmployeeRepository employeeRepository;
-
-
 
     @Override
     public Employee create(Employee employee) {
@@ -61,20 +61,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getAll() {
-        return null;
+        return employeeRepository.findAll();
     }
 
     @Override
-    public EmployeeResponseDto get() {
-        return null;
+    public Optional<Employee> get(Integer id) {
+        return employeeRepository.findById(id);
     }
 
     @Override
-    public void delete(Integer id) {
+    public ResponseDto delete(Integer id) {
         Employee employee =  employeeRepository.findById(id).orElseThrow(()-> {
             throw new EmployeeException("Employee not found",HttpStatus.NOT_FOUND.value(),HttpStatus.NOT_FOUND);
         });
         employeeRepository.delete(employee);
+        return new ResponseDto("Employee deleted successfully",HttpStatus.OK,HttpStatus.OK.value());
     }
 
 }

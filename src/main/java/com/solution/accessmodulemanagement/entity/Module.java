@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -17,4 +20,5 @@ public class Module extends BaseModel {
 
     @Column(name = "module_name")
     private String moduleName;
+
 }

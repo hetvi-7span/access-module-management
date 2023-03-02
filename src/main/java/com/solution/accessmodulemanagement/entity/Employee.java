@@ -27,7 +27,11 @@ public class Employee extends BaseModel{
     private String phoneNumber;
     private Double experience;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinTable(name = "employee_module_details")
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinTable(name = "employee_module_details",
+            joinColumns =
+                    {@JoinColumn(name = "emp_id", referencedColumnName = "id")},
+            inverseJoinColumns =
+                    {@JoinColumn(name = "module_id", referencedColumnName = "id")})
     Set<Module> module;
 }
