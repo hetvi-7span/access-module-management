@@ -2,9 +2,7 @@ package com.solution.accessmodulemanagement.dto.request;
 
 import com.solution.accessmodulemanagement.entity.ModuleEnum;
 import jakarta.validation.constraints.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -12,6 +10,9 @@ import java.util.Set;
 @Setter
 @Getter
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmployeeRequestDto {
 
     @NotBlank(message = "Employee name must not be blank")

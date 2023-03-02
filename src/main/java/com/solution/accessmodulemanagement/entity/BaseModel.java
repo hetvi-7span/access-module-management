@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 public class BaseModel implements Serializable {
 
-    @CreationTimestamp
+    @UpdateTimestamp
     @Column(name = "created_date")
     private LocalDateTime createDate;
 
