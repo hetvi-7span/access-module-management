@@ -1,20 +1,21 @@
 package com.solution.accessmodulemanagement.dto.response;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class ResponseDto {
 
     String message;
     HttpStatus httpStatus;
-
     Integer httpStatusCode;
+
+    Object data;
 
     public ResponseDto(String message, HttpStatus httpStatus, Integer httpStatusCode) {
         this.message = message;

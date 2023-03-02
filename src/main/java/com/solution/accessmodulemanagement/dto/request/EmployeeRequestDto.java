@@ -1,5 +1,6 @@
 package com.solution.accessmodulemanagement.dto.request;
 
+import com.solution.accessmodulemanagement.entity.ModuleEnum;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,13 +20,13 @@ public class EmployeeRequestDto {
     private String email;
     private String phoneNumber;
     private Double experience;
-    private Set<ModuleRequestDto> module;
+    private Set<ModuleEnum> module;
 
-    public Set<ModuleRequestDto> getModule() {
+  /*  public Set<ModuleRequestDto> getModule() {
         return module;
     }
 
     public void setModule(Set<ModuleRequestDto> module) {
         this.module = module;
-    }
+    }*/
 }

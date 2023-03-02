@@ -3,14 +3,16 @@ package com.solution.accessmodulemanagement.service.impl;
 import com.solution.accessmodulemanagement.dto.request.EmployeeRequestDto;
 import com.solution.accessmodulemanagement.dto.response.EmployeeResponseDto;
 import com.solution.accessmodulemanagement.entity.Employee;
+import com.solution.accessmodulemanagement.exception.EmployeeException;
 import com.solution.accessmodulemanagement.exception.EmployeeNotFoundException;
 import com.solution.accessmodulemanagement.repository.EmployeeRepository;
+import com.solution.accessmodulemanagement.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import com.solution.accessmodulemanagement.service.EmployeeService;
 
 import java.util.List;
 
@@ -21,23 +23,24 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     ModelMapper modelMapper;
     @Autowired
-
     EmployeeRepository employeeRepository;
 
+
+
     @Override
-    public EmployeeResponseDto create(EmployeeRequestDto employeeRequestDto) {
-        Employee employee = employeeRepository.save(modelMapper.map(employeeRequestDto,Employee.class));
-        EmployeeResponseDto employeeResponseDto = modelMapper.map(employee,EmployeeResponseDto.class);
-        employeeResponseDto.setHttpStatus(HttpStatus.CREATED);
-        employeeResponseDto.setHttpStatusCode(HttpStatus.CREATED.value());
-        employeeResponseDto.setMessage("Employee created successfully");
-        return employeeResponseDto;
+    public Employee create(Employee employee) {
+        try{
+            return employeeRepository.save(employee);
+        }catch (DataIntegrityViolationException exception){
+           throw new EmployeeException("Employee already exists with phone number 348938498394",HttpStatus.CONFLICT.value(),HttpStatus.CONFLICT);
+        }
+
     }
 
     @Override
     public EmployeeResponseDto update(EmployeeRequestDto employeeRequestDto, Integer id) {
         Employee employee =  employeeRepository.findById(id).orElseThrow(()-> {
-            return new EmployeeNotFoundException("Employee data not found");
+            throw new EmployeeNotFoundException("Employee data not found");
         });
 //        Employee employee1 = employee.builder()
 //                .name(employeeRequestDto.getName())
@@ -57,7 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeResponseDto> getAll() {
+    public List<Employee> getAll() {
         return null;
     }
 
@@ -69,8 +72,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void delete(Integer id) {
         Employee employee =  employeeRepository.findById(id).orElseThrow(()-> {
-            return new EmployeeNotFoundException("Employee data not found");
+            throw new EmployeeException("Employee not found",HttpStatus.NOT_FOUND.value(),HttpStatus.NOT_FOUND);
         });
         employeeRepository.delete(employee);
     }
+
 }

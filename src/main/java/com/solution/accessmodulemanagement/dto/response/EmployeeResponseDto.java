@@ -1,6 +1,5 @@
 package com.solution.accessmodulemanagement.dto.response;
 
-import com.solution.accessmodulemanagement.entity.Module;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +19,5 @@ public class EmployeeResponseDto extends ResponseDto{
     private String email;
     private String phoneNumber;
     private Double experience;
-    private Set<Module> module;
+    private Set<ModuleResponseDto> module;
 }
