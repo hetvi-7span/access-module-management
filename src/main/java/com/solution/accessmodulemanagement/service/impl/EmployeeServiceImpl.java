@@ -32,7 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         try{
             return employeeRepository.save(employee);
         }catch (DataIntegrityViolationException exception){
-           throw new EmployeeException("Employee already exists with phone number 348938498394",HttpStatus.CONFLICT.value(),HttpStatus.CONFLICT);
+           throw new EmployeeException("Employee already exists with phone number " + employee.getPhoneNumber() ,HttpStatus.CONFLICT.value(),HttpStatus.CONFLICT);
         }
 
     }

@@ -6,6 +6,7 @@ import com.solution.accessmodulemanagement.dto.response.ResponseDto;
 import com.solution.accessmodulemanagement.entity.Employee;
 import com.solution.accessmodulemanagement.service.EmployeeService;
 import com.solution.accessmodulemanagement.transformer.EmployeeTransformer;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -39,7 +40,7 @@ public class EmployeeController {
     }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EmployeeResponseDto> addEmployee(@RequestBody EmployeeRequestDto employeeDto) {
+    public ResponseEntity<EmployeeResponseDto> addEmployee(@Valid @RequestBody EmployeeRequestDto employeeDto) {
         Employee employee = employeeTransformer.transformEmployeeRequest(employeeDto);
         return ResponseEntity.ok(employeeTransformer.transformEmployeeEntity(employee));
     }
