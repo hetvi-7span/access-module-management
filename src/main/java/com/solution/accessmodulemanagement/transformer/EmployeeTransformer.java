@@ -42,16 +42,17 @@ public class EmployeeTransformer {
             });
             employee.setModule(moduleSet);
         }
-        return employeeService.create(employee);
+        return employee;
     }
 
-    public EmployeeResponseDto transformEmployeeEntity(Employee employee) {
+    public EmployeeResponseDto transformEmployeeEntity(Employee employee,HttpStatus httpStatus, Integer code, String messages) {
         EmployeeResponseDto employeeResponseDto = entityToDto(employee);
-        employeeResponseDto.setHttpStatus(HttpStatus.CREATED);
-        employeeResponseDto.setHttpStatusCode(HttpStatus.CREATED.value());
-        employeeResponseDto.setMessage("Employee created successfully");
+        employeeResponseDto.setHttpStatus(httpStatus);
+        employeeResponseDto.setHttpStatusCode(code);
+        employeeResponseDto.setMessage(messages);
         return employeeResponseDto;
     }
+
 
 
     public ModuleResponseDto transformModuleEntity(Module module) {
@@ -60,7 +61,7 @@ public class EmployeeTransformer {
 
     public ResponseDto transformEmployeeEntityList(List<Employee> employeeList) {
         ResponseDto responseDto = new ResponseDto();
-        if (employeeList.size() > 0) {
+        if (!employeeList.isEmpty()) {
             List<EmployeeResponseDto> employeeResponseDtoList = new ArrayList<>();
             employeeList.forEach(employee -> {
                 EmployeeResponseDto employeeResponseDto = entityToDto(employee);

@@ -38,21 +38,25 @@ public class EmployeeController {
     public ResponseEntity<ResponseDto> getEmployeeById(@PathVariable int id) {
         log.info("Rest api call to get a particular employees from database");
         Optional<Employee> employee = employeeService.get(id);
-        return ResponseEntity.ok(employeeTransformer.optionalToDto(employee.get()));
+        return ResponseEntity.ok(employeeTransformer.optionalToDto(employeeService.get(id)));
     }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EmployeeResponseDto> addEmployee(@Valid @RequestBody EmployeeRequestDto employeeDto) {
         log.info("Rest api call to get add new employee in database");
         Employee employee = employeeTransformer.transformEmployeeRequest(employeeDto);
-        return ResponseEntity.ok(employeeTransformer.transformEmployeeEntity(employee));
+        return ResponseEntity.ok(employeeTransformer.transformEmployeeEntity(employeeService.create(employee), HttpStatus.CREATED,HttpStatus.CREATED.value(),"Employee created successfully"));
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> updateEmployee(@RequestBody EmployeeRequestDto employeeDto, @PathVariable("id") Integer id) {
         log.info("Rest api call to get update existing employee in database");
         return ResponseEntity.ok(employeeService.update(employeeDto, id));
+    public ResponseEntity<EmployeeResponseDto> updateEmployee(@RequestBody EmployeeRequestDto employeeDto, @PathVariable("id") Integer id) {
+        Employee employee = employeeTransformer.transformEmployeeRequest(employeeDto);
+        return ResponseEntity.ok(employeeTransformer.transformEmployeeEntity(employeeService.update(employee, id),HttpStatus.OK,HttpStatus.OK.value(), "Employee created successfully"));
     }
+
 
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseDto> deleteEmployee(@PathVariable int id) {
