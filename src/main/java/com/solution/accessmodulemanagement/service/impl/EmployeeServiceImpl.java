@@ -22,6 +22,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     EmployeeRepository employeeRepository;
 
+    /**
+     *
+     * @param employee
+     * @return inserted employee object
+     */
     @Override
     public Employee create(Employee employee) {
         try{
@@ -33,6 +38,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 
+    /**
+     *
+     * @param employee
+     * @param id
+     * @return updates employee object
+     */
     @Override
     public Employee update(Employee employee, Integer id) {
 
@@ -48,18 +59,32 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     }
 
+    /**
+     *
+     * @return list of existing employee
+     */
     @Override
     public List<Employee> getAll() {
         return employeeRepository.findAll();
     }
 
 
+    /**
+     *
+     * @param id
+     * @return existing employee object
+     */
     public Employee get(Integer id) {
         return  getById(id).orElseThrow(()-> {
             throw new EmployeeException("Employee not found",HttpStatus.NOT_FOUND.value(),HttpStatus.NOT_FOUND);
         });
     }
 
+    /**
+     *
+     * @param id
+     * @return response after deleting employee
+     */
     @Override
     public ResponseDto delete(Integer id) {
         Employee employee =  getById(id).orElseThrow(()-> {
@@ -69,14 +94,30 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new ResponseDto("Employee deleted successfully",HttpStatus.OK,HttpStatus.OK.value());
     }
 
+    /**
+     * save operation in database
+     * @param employee
+     * @return inserted employee object
+     */
     private Employee saveOrUpdate(Employee employee) {
         return employeeRepository.save(employee);
     }
 
+    /**
+     *
+     * @param id
+     * @return optional of existing employee
+     */
     private Optional<Employee> getById(Integer id) {
         return employeeRepository.findById(id);
     }
 
+    /**
+     *
+     * @param employee
+     * @param existingEmployee
+     * @return employee object
+     */
     private Employee setEmployeeData(Employee employee, Employee existingEmployee) {
         return existingEmployee.builder()
                 .id(existingEmployee.getId())

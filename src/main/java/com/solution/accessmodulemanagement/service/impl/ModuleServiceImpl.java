@@ -12,6 +12,10 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Autowired
     ModuleRepository moduleRepository;
+
+    /**
+     * To insert data in module table
+     */
     @Override
     public void createModule() {
 

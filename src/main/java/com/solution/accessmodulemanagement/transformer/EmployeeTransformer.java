@@ -28,8 +28,11 @@ public class EmployeeTransformer {
     @Autowired
     ModelMapper modelMapper;
 
-    @Autowired
-    EmployeeService employeeService;
+    /**
+     *
+     * @param employeeRequestDto
+     * @return Employee Entity
+     */
 
     public Employee transformEmployeeRequest(EmployeeRequestDto employeeRequestDto) {
         Employee employee = modelMapper.map(employeeRequestDto, Employee.class);
@@ -45,6 +48,15 @@ public class EmployeeTransformer {
         return employee;
     }
 
+    /**
+     *
+     * @param employee
+     * @param httpStatus
+     * @param code
+     * @param messages
+     * @return Response Dto of employee
+     */
+
     public EmployeeResponseDto transformEmployeeEntity(Employee employee,HttpStatus httpStatus, Integer code, String messages) {
         EmployeeResponseDto employeeResponseDto = entityToDto(employee);
         employeeResponseDto.setHttpStatus(httpStatus);
@@ -54,11 +66,20 @@ public class EmployeeTransformer {
     }
 
 
-
+    /**
+     *
+     * @param module
+     * @return Response Dto of module
+     */
     public ModuleResponseDto transformModuleEntity(Module module) {
         return modelMapper.map(module, ModuleResponseDto.class);
     }
 
+    /**
+     *
+     * @param employeeList
+     * @return Common response Dto
+     */
     public ResponseDto transformEmployeeEntityList(List<Employee> employeeList) {
         ResponseDto responseDto = new ResponseDto();
         if (!employeeList.isEmpty()) {
@@ -78,6 +99,12 @@ public class EmployeeTransformer {
         return responseDto;
     }
 
+
+    /**
+     *
+     * @param employee
+     * @return Response Dto for employee
+     */
     public EmployeeResponseDto entityToDto(Employee employee) {
         EmployeeResponseDto employeeResponseDto = modelMapper.map(employee, EmployeeResponseDto.class);
         if (employee.getModule() != null) {
@@ -87,6 +114,12 @@ public class EmployeeTransformer {
         }
         return employeeResponseDto;
     }
+
+    /**
+     *
+     * @param employeeOptional
+     * @return Common response Dto
+     */
 
     public ResponseDto optionalToDto(Employee employeeOptional) {
         ResponseDto responseDto = new ResponseDto();
