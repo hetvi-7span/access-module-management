@@ -1,15 +1,16 @@
 package com.solution.accessmodulemanagement.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "employee_details" ,uniqueConstraints = { @UniqueConstraint(columnNames = { "phone_number" }) })
 @ToString
 public class Employee extends BaseModel{
@@ -27,7 +28,7 @@ public class Employee extends BaseModel{
     private String phoneNumber;
     private Double experience;
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "employee_module_details",
             joinColumns =
                     {@JoinColumn(name = "emp_id", referencedColumnName = "id")},
